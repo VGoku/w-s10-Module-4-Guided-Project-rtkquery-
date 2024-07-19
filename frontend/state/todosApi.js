@@ -9,8 +9,12 @@ export const todosApi = createApi({
             query: () => "todos"
         }),
         toggleTodo: build.mutation({
-
-        }),
+            query: ({ id, todo }) => ({
+                url: `todos/${id}`,
+                method: "PUT",
+                body: todo
+            })
+    }),
         createTodo: build.mutation({
 
         })

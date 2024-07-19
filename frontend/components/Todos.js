@@ -1,7 +1,8 @@
-import React from 'react'
-import styled from 'styled-components'
-import { useSelector, useDispatch } from 'react-redux'
-import { toggleShowCompletedTodos } from '../state/todosSlice'
+import React from 'react';
+import styled from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
+import { toggleShowCompletedTodos } from '../state/todosSlice';
+import { useGetTodosQuery } from '../state/todosAPI';
 
 const StyledTodo = styled.li`
   text-decoration: ${pr => pr.$complete ? 'line-through' : 'initial'};
@@ -9,6 +10,8 @@ const StyledTodo = styled.li`
 `
 
 export default function Todo() {
+  // rtk query
+  const { data: todos } = useGetTodosQuery()
   // redux
   const showCompletedTodos = useSelector(st => st.todosState.showCompletedTodos)
   const dispatch = useDispatch()
@@ -18,16 +21,21 @@ export default function Todo() {
       <h3>Todos</h3>
       <ul>
         {
-          [
-            { id: 1, label: 'Laundry', complete: true },
-            { id: 2, label: 'Groceries', complete: false },
-            { id: 3, label: 'Dishes', complete: false },
-          ].filter(todo => {
+          // [
+          //   { id: 1, label: 'Laundry', complete: true },
+          //   { id: 2, label: 'Groceries', complete: false },
+          //   { id: 3, label: 'Dishes', complete: false },// ]
+          todos?.filter(todo => {
             return showCompletedTodos || !todo.complete
           })
             .map(todo => {
+              const onToggle = () => {
+                // ToggleTodo({ id: todo.id, todo: { complete: !todo.complete } })
+
+              }
               return (
-                <StyledTodo $complete={todo.complete} key={todo.id}>
+                <StyledTodo
+                onClick={onToggle} $complete={todo.complete} key={todo.id}>
                   <span>{todo.label}{todo.complete && ' ✔️'}</span>
                 </StyledTodo>
               )

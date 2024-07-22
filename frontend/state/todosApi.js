@@ -16,7 +16,6 @@ export const todosApi = createApi({
             }) //((12:08 vid time))
     }),
         createTodo: build.mutation({
-
         })
     })
 })

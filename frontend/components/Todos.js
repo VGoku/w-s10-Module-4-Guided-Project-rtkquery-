@@ -9,23 +9,24 @@ const StyledTodo = styled.li`
   cursor: pointer;
 `
 
-export default function Todo() {   //((14:01))
+export default function Todo() {   
   // rtk query
-  const { data: todos } = useGetTodosQuery();
-  const [toggleTodo] = useToggleTodoMutation();
+  const { data: todos, isLoading: todosLoading, isFetching: todosRefreshing } = useGetTodosQuery();
+  const [toggleTodo, { error: toggleError, isLoading: todosToggling }] = useToggleTodoMutation();
   // redux
   const showCompletedTodos = useSelector(st => st.todosState.showCompletedTodos)
   const dispatch = useDispatch()
   return (
     <div id="todos">
-      <div className="error"></div>
-      <h3>Todos</h3>
+      <div className="error">{toggleError && toggleError.data.message}</div>
+      <h3>Todos {(todosToggling || todosRefreshing) && "being updated"}</h3>
       <ul>
         {
           // [
           //   { id: 1, label: 'Laundry', complete: true },
           //   { id: 2, label: 'Groceries', complete: false },
           //   { id: 3, label: 'Dishes', complete: false },// ]
+          todosLoading ? "todos loading..." :
           todos?.filter(todo => {
             return showCompletedTodos || !todo.complete
           })

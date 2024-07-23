@@ -9,7 +9,7 @@ const StyledTodo = styled.li`
   cursor: pointer;
 `
 
-export default function Todo() {
+export default function Todo() {   //((14:01))
   // rtk query
   const { data: todos } = useGetTodosQuery();
   const [toggleTodo] = useToggleTodoMutation();
